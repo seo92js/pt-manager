@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seojs.ptmanager.domain.admin.AdminMapper">
+<mapper namespace="com.seojs.ptmanager.mapper.AdminMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into admin (login_id, password)
-        values (#{loginId}, #{password})
+        insert into admin (login_id, name, password)
+        values (#{loginId}, #{name}, #{password})
     </insert>
 
     <select id="findById" resultType="Admin">
@@ -14,9 +14,14 @@
         where id = #{id}
     </select>
 
-   <select id="findAll" resultType="Admin">
+    <select id="findAll" resultType="Admin">
        select *
        from admin
-   </select>
+       <where>
+           <if test="name != null">
+               and name like concat('%', #{name}, '%')
+           </if>
+       </where>
+    </select>
 
 </mapper>

@@ -1,5 +1,6 @@
-package com.seojs.ptmanager.domain.admin;
+package com.seojs.ptmanager.mapper;
 
+import com.seojs.ptmanager.domain.admin.Admin;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface AdminMapper {
 
     Optional<Admin> findById(Long id);
 
-    List<Admin> findAll();
+    List<Admin> findAll(String name);
 }

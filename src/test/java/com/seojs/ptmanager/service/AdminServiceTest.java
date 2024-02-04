@@ -1,44 +1,55 @@
 package com.seojs.ptmanager.service;
 
-import com.seojs.ptmanager.domain.admin.Admin;
-import com.seojs.ptmanager.domain.admin.AdminRepository;
+import com.seojs.ptmanager.web.dto.AdminDto;
+import com.seojs.ptmanager.web.dto.AdminResponseDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 class AdminServiceTest {
-    @Autowired
-    AdminRepository adminRepository;
-
     @Autowired
     AdminService adminService;
 
     @Test
     void save() {
-        Admin admin = new Admin("id", "pw");
+        AdminDto adminDto = new AdminDto("id", "name", "pw");
 
-        Admin savedAdmin = adminService.save(admin);
+        Long savedId = adminService.save(adminDto);
 
-        Admin findAdmin = adminService.findById(savedAdmin.getId()).get();
+        AdminResponseDto findAdmin = adminService.findById(savedId);
 
-        assertThat(findAdmin).isEqualTo(savedAdmin);
+        assertThat(findAdmin.getName()).isEqualTo(adminDto.getName());
+        assertThat(findAdmin.getLoginId()).isEqualTo(adminDto.getLoginId());
     }
 
     @Test
     void findAll() {
-        Admin admin1 = new Admin("1", "pw");
-        Admin admin2 = new Admin("2", "pw");
+        AdminDto adminDto1 = new AdminDto("1", "유상철", "pw");
+        AdminDto adminDto2 = new AdminDto("2", "박지성", "pw");
+        AdminDto adminDto3 = new AdminDto("3", "기성용","pw");
 
-        adminService.save(admin1);
-        adminService.save(admin2);
+        Long savedId1 = adminService.save(adminDto1);
+        Long savedId2 = adminService.save(adminDto2);
+        Long savedId3 = adminService.save(adminDto3);
 
-        List<Admin> all = adminService.findAll();
+        List<AdminResponseDto> all = adminService.findAll(null);
+        assertThat(all.size()).isEqualTo(3);
 
-        assertThat(all.size()).isEqualTo(2);
+        List<AdminResponseDto> find1 = adminService.findAll("성");
+        Assertions.assertThat(find1.size()).isEqualTo(2);
+
+        List<AdminResponseDto> find2 = adminService.findAll("유상");
+        Assertions.assertThat(find2.size()).isEqualTo(1);
+
+        List<AdminResponseDto> find3 = adminService.findAll("기성용");
+        Assertions.assertThat(find3.size()).isEqualTo(1);
     }
 }

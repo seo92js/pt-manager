@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seojs.ptmanager.mapper.ReserveMapper">
+    <resultMap id="ReserveResultMap" type="com.seojs.ptmanager.domain.reserve.Reserve">
+        <id property="id" column="id"/>
+        <result property="reserveTime" column="reserve_time"/>
+        <association property="member" javaType="com.seojs.ptmanager.domain.member.Member">
+            <id property="id" column="member_id"/>
+        </association>
+        <association property="trainer" javaType="com.seojs.ptmanager.domain.trainer.Trainer">
+            <id property="id" column="trainer_id"/>
+        </association>
+        <association property="ticket" javaType="com.seojs.ptmanager.domain.ticket.Ticket">
+            <id property="id" column="ticket_id"/>
+        </association>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.seojs.ptmanager.domain.reserve.Reserve">
+        insert into reserve (member_id, trainer_id, ticket_id, reserve_time)
+        values (#{member.id}, #{trainer.id}, #{ticket.id}, #{reserveTime})
+    </insert>
+
+    <select id="findByMemberId" resultMap="ReserveResultMap">
+        select *
+        from reserve
+        where member_id = #{memberId}
+    </select>
+
+    <select id="findByTrainerId" resultMap="ReserveResultMap">
+        select *
+        from reserve
+        where trainer_id = #{trainerId}
+    </select>
+</mapper>

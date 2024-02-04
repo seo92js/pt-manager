@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seojs.ptmanager.mapper.MessageMapper">
+    <resultMap id="MessageResultMap" type="com.seojs.ptmanager.domain.message.Message">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="isRead" column="is_read"/>
+        <result property="createdDate" column="created_date"/>
+        <association property="sendMember" javaType="com.seojs.ptmanager.domain.member.Member">
+            <id property="id" column="send_member_id"/>
+        </association>
+        <association property="receiveTrainer" javaType="com.seojs.ptmanager.domain.trainer.Trainer">
+            <id property="id" column="receive_trainer_id"/>
+        </association>
+        <association property="sendTrainer" javaType="com.seojs.ptmanager.domain.trainer.Trainer">
+            <id property="id" column="send_trainer_id"/>
+        </association>
+        <association property="receiveMember" javaType="com.seojs.ptmanager.domain.member.Member">
+            <id property="id" column="receive_member_id"/>
+        </association>
+
+<!--        <result property="createdDate" column="created_date"/>-->
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.seojs.ptmanager.domain.message.Message">
+        insert into message (content, is_read, send_member_id, receive_trainer_id, send_trainer_id, receive_member_id, created_date)
+        values (#{content}, #{isRead}, #{sendMember.id}, #{receiveTrainer.id}, #{sendTrainer.id}, #{receiveMember.id}, #{createdDate})
+    </insert>
+
+    <select id="findByMemberIdAndTrainerId" resultMap="MessageResultMap">
+        select *
+        from message
+        where (send_member_id = #{memberId} and receive_trainer_id = #{trainerId}) or (send_trainer_id = #{trainerId} and receive_member_id = #{memberId})
+    </select>
+
+    <select id="findBySendMemberId" resultMap="MessageResultMap">
+        select *
+        from message
+        where send_member_id = #{memberId}
+    </select>
+
+    <select id="findByReceiveMemberId" resultMap="MessageResultMap">
+        select *
+        from message
+        where receive_member_id = #{memberId}
+    </select>
+
+    <select id="findBySendTrainerId" resultMap="MessageResultMap">
+        select *
+        from message
+        where send_trainer_id = #{trainerId}
+    </select>
+
+    <select id="findByReceiveTrainerId" resultMap="MessageResultMap">
+        select *
+        from message
+        where receive_trainer_id = #{trainerId}
+    </select>
+</mapper>

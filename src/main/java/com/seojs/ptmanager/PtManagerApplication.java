@@ -9,5 +9,4 @@ public class PtManagerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PtManagerApplication.class, args);
 	}
-
 }
