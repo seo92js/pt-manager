@@ -2,6 +2,7 @@ package com.seojs.ptmanager.service;
 
 import com.seojs.ptmanager.domain.admin.Admin;
 import com.seojs.ptmanager.domain.admin.AdminRepository;
+import com.seojs.ptmanager.exception.AdminNotFoundEx;
 import com.seojs.ptmanager.web.dto.AdminDto;
 import com.seojs.ptmanager.web.dto.AdminResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class AdminService {
 
     @Transactional
     public AdminResponseDto findById(Long id) {
-        Admin admin = adminRepository.findById(id).orElseThrow();
+        Admin admin = adminRepository.findById(id).orElseThrow(() -> new AdminNotFoundEx("관리자가 없습니다. id = " + id));
         return new AdminResponseDto(admin);
     }
 

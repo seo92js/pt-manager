@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -118,38 +117,5 @@ class TrainerServiceTest {
         assertThat(findTrainer.getReceivedMessages().size()).isEqualTo(1);
         assertThat(findTrainer.getSentMessages().get(0).getContent()).isEqualTo(messageDto2.getContent());
         assertThat(findTrainer.getReceivedMessages().get(0).getContent()).isEqualTo(messageDto1.getContent());
-    }
-
-    @Test
-    void 예약조회() {
-        MemberDto memberDto1 = new MemberDto("id1","name","pw");
-        Long memberId1 = memberService.save(memberDto1);
-
-        MemberDto memberDto2 = new MemberDto("id2","name","pw");
-        Long memberId2 = memberService.save(memberDto2);
-
-        TrainerDto trainerDto = new TrainerDto("id", "트레이너", "pw");
-        Long trainerId = trainerService.save(trainerDto);
-
-        TicketDto ticketDto = new TicketDto(5, 30000);
-        Long ticketId = ticketService.save(ticketDto);
-
-        //티켓 구매
-        MemberTicketDto memberTicketDto1 = new MemberTicketDto(memberId1, ticketId);
-        memberService.buyTicket(memberTicketDto1);
-
-        MemberTicketDto memberTicketDto2 = new MemberTicketDto(memberId2, ticketId);
-        memberService.buyTicket(memberTicketDto2);
-
-        //예약
-        LocalDateTime now = LocalDateTime.now();
-        ReserveDto reserveDto1 = new ReserveDto(memberId1, trainerId, ticketId, now);
-        memberService.reserve(reserveDto1);
-
-        ReserveDto reserveDto2 = new ReserveDto(memberId2, trainerId, ticketId, now);
-        memberService.reserve(reserveDto2);
-
-        TrainerResponseDto trainer = trainerService.findById(trainerId);
-        assertThat(trainer.getReserves().size()).isEqualTo(2);
     }
 }

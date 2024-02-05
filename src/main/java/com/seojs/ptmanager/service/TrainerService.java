@@ -7,6 +7,7 @@ import com.seojs.ptmanager.domain.reserve.ReserveRepository;
 import com.seojs.ptmanager.domain.trainer.Trainer;
 import com.seojs.ptmanager.domain.trainer.TrainerRepository;
 import com.seojs.ptmanager.exception.TrainerDuplicateEx;
+import com.seojs.ptmanager.exception.TrainerNotFoundEx;
 import com.seojs.ptmanager.web.dto.TrainerDto;
 import com.seojs.ptmanager.web.dto.TrainerResponseDto;
 import com.seojs.ptmanager.web.dto.TrainerTimeUpdateDto;
@@ -33,7 +34,7 @@ public class TrainerService {
 
     @Transactional
     public TrainerResponseDto findById(Long id) {
-        Trainer trainer = trainerRepository.findById(id).orElseThrow();
+        Trainer trainer = trainerRepository.findById(id).orElseThrow(() -> new TrainerNotFoundEx("트레이너가 없습니다. id = " + id));
 
         //보낸메시지
         List<Message> sentMessages = messageRepository.findBySendTrainerId(id);
@@ -52,7 +53,7 @@ public class TrainerService {
 
     @Transactional
     public TrainerResponseDto findByLoginId(String loginId) {
-        Trainer trainer = trainerRepository.findByLoginId(loginId).orElseThrow();
+        Trainer trainer = trainerRepository.findByLoginId(loginId).orElseThrow(() -> new TrainerNotFoundEx("트레이너가 없습니다. loginId = " + loginId));
 
         List<Message> sentMessages = messageRepository.findBySendTrainerId(trainer.getId());
         trainer.addAllSentMessage(sentMessages);

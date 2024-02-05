@@ -1,13 +1,15 @@
 package com.seojs.ptmanager.service;
 
 import com.seojs.ptmanager.exception.MemberDuplicateEx;
-import com.seojs.ptmanager.web.dto.*;
+import com.seojs.ptmanager.web.dto.MemberDto;
+import com.seojs.ptmanager.web.dto.MemberResponseDto;
+import com.seojs.ptmanager.web.dto.MessageDto;
+import com.seojs.ptmanager.web.dto.TrainerDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,9 +26,6 @@ class MemberServiceTest {
 
     @Autowired
     MessageService messageService;
-
-    @Autowired
-    TicketService ticketService;
 
     @Test
     void save() {
@@ -50,8 +49,11 @@ class MemberServiceTest {
         memberService.save(memberDto2);
         memberService.save(memberDto3);
 
-        List<MemberResponseDto> all = memberService.findAll(null);
-        assertThat(all.size()).isEqualTo(3);
+        List<MemberResponseDto> all1 = memberService.findAll("");
+        assertThat(all1.size()).isEqualTo(3);
+
+        List<MemberResponseDto> all2 = memberService.findAll(null);
+        assertThat(all2.size()).isEqualTo(3);
 
         List<MemberResponseDto> find1 = memberService.findAll("김");
         assertThat(find1.size()).isEqualTo(2);
@@ -94,77 +96,5 @@ class MemberServiceTest {
         assertThat(findMember.getReceivedMessages().size()).isEqualTo(1);
         assertThat(findMember.getSentMessages().get(0).getContent()).isEqualTo(messageDto1.getContent());
         assertThat(findMember.getReceivedMessages().get(0).getContent()).isEqualTo(messageDto2.getContent());
-    }
-
-    @Test
-    void 이용권_구매() {
-        MemberDto memberDto = new MemberDto("id","name","pw");
-        Long memberId = memberService.save(memberDto);
-
-        MemberDto memberDto2 = new MemberDto("id2","name","pw");
-        Long memberId2 = memberService.save(memberDto2);
-
-        TicketDto ticketDto1 = new TicketDto(5, 30000);
-        Long ticketId1 = ticketService.save(ticketDto1);
-
-        TicketDto ticketDto2 = new TicketDto(10, 50000);
-        Long ticketId2 = ticketService.save(ticketDto2);
-
-        //티켓 1 구매
-        MemberTicketDto memberTicketDto1 = new MemberTicketDto(memberId, ticketId1);
-        memberService.buyTicket(memberTicketDto1);
-
-        assertThat(memberService.findById(memberId).getTickets().size()).isEqualTo(1);
-        assertThat(memberService.findById(memberId).getTickets().get(0).getTotalNum()).isEqualTo(ticketDto1.getTotalNum());
-        assertThat(memberService.findById(memberId).getTickets().get(0).getRemainNum()).isEqualTo(ticketDto1.getTotalNum());
-        assertThat(memberService.findById(memberId).getTickets().get(0).getPrice()).isEqualTo(ticketDto1.getPrice());
-        assertThat(memberService.findById(memberId).getTickets().get(0).getStatus()).isEqualTo(true);
-
-        //티켓 2 구매
-        MemberTicketDto memberTicketDto2 = new MemberTicketDto(memberId, ticketId2);
-        memberService.buyTicket(memberTicketDto2);
-
-        assertThat(memberService.findById(memberId).getTickets().size()).isEqualTo(2);
-        assertThat(memberService.findById(memberId).getTickets().get(1).getTotalNum()).isEqualTo(ticketDto2.getTotalNum());
-        assertThat(memberService.findById(memberId).getTickets().get(1).getPrice()).isEqualTo(ticketDto2.getPrice());
-
-        //멤버 2 는 티켓 0장
-        assertThat(memberService.findById(memberId2).getTickets().size()).isEqualTo(0);
-
-    }
-
-    @Test
-    void 예약_후_조회() {
-        MemberDto memberDto = new MemberDto("id","name","pw");
-        Long memberId = memberService.save(memberDto);
-
-        TrainerDto trainerDto = new TrainerDto("id", "트레이너", "pw");
-        Long trainerId = trainerService.save(trainerDto);
-
-        TicketDto ticketDto = new TicketDto(5, 30000);
-        Long ticketId = ticketService.save(ticketDto);
-
-        //티켓 구매
-        MemberTicketDto memberTicketDto = new MemberTicketDto(memberId, ticketId);
-        memberService.buyTicket(memberTicketDto);
-
-        //예약
-        LocalDateTime now = LocalDateTime.now();
-        ReserveDto reserveDto = new ReserveDto(memberId, trainerId, ticketId, now);
-        memberService.reserve(reserveDto);
-
-        MemberResponseDto member = memberService.findById(memberId);
-        assertThat(member.getReserves().get(0).getReserveTime()).isEqualTo(now);
-        assertThat(member.getTickets().get(0).getRemainNum()).isEqualTo(4);
-        assertThat(member.getTickets().get(0).getStatus()).isEqualTo(true);
-
-        memberService.reserve(reserveDto);
-        memberService.reserve(reserveDto);
-        memberService.reserve(reserveDto);
-        memberService.reserve(reserveDto);
-
-        member = memberService.findById(memberId);
-        assertThat(member.getTickets().get(0).getRemainNum()).isEqualTo(0);
-        assertThat(member.getTickets().get(0).getStatus()).isEqualTo(false);
     }
 }

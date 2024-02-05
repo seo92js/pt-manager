@@ -10,10 +10,12 @@ import com.seojs.ptmanager.domain.reserve.Reserve;
 import com.seojs.ptmanager.domain.reserve.ReserveRepository;
 import com.seojs.ptmanager.domain.ticket.Ticket;
 import com.seojs.ptmanager.domain.ticket.TicketRepository;
-import com.seojs.ptmanager.domain.trainer.Trainer;
 import com.seojs.ptmanager.domain.trainer.TrainerRepository;
 import com.seojs.ptmanager.exception.MemberDuplicateEx;
-import com.seojs.ptmanager.web.dto.*;
+import com.seojs.ptmanager.exception.MemberNotFoundEx;
+import com.seojs.ptmanager.exception.TicketNotFoundEx;
+import com.seojs.ptmanager.web.dto.MemberDto;
+import com.seojs.ptmanager.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +50,7 @@ public class MemberService {
 
     @Transactional
     public MemberResponseDto findById(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow();
+        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundEx("멤버가 없습니다. id = " + id));
 
         //보낸메시지
         List<Message> sentMessages = messageRepository.findBySendMemberId(id);
@@ -63,7 +65,7 @@ public class MemberService {
         List<Ticket> tickets = new ArrayList<>();
         for (MemberTicket memberTicket : memberTickets) {
             Long ticketId = memberTicket.getTicketId();
-            Ticket ticket = ticketRepository.findById(ticketId).orElseThrow();
+            Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new TicketNotFoundEx("이용권이 없습니다. id = " + ticketId));
             tickets.add(ticket);
         }
         member.addAllTicket(tickets);
@@ -80,34 +82,6 @@ public class MemberService {
         return memberRepository.findAll(name).stream()
                 .map(MemberResponseDto::new)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void buyTicket(MemberTicketDto memberTicketDto) {
-        Member member = memberRepository.findById(memberTicketDto.getMemberId()).orElseThrow();
-        Ticket ticket = ticketRepository.findById(memberTicketDto.getTicketId()).orElseThrow();
-
-        MemberTicket memberTicket = new MemberTicket(memberTicketDto.getMemberId(), memberTicketDto.getTicketId());
-        memberTicketRepository.save(memberTicket);
-
-        member.addTicket(ticket);
-    }
-
-    @Transactional
-    public void reserve(ReserveDto reserveDto) {
-        Member member = memberRepository.findById(reserveDto.getMemberId()).orElseThrow();
-        Trainer trainer = trainerRepository.findById(reserveDto.getTrainerId()).orElseThrow();
-        Ticket ticket = ticketRepository.findById(reserveDto.getTicketId()).orElseThrow();
-
-        ticket.use();
-
-        Reserve reserve = new Reserve(member, trainer, ticket, reserveDto.getReserveTime());
-
-        member.addReserve(reserve);
-
-        reserveRepository.save(reserve);
-
-        ticketService.updateRemainNum(reserveDto.getTicketId(), new TicketUpdateNumDto(ticket.getRemainNum(), ticket.getStatus()));
     }
 
     void memberDuplicateCheck(String loginId) {

@@ -31,14 +31,17 @@ public class Trainer {
     }
 
     public void addAllSentMessage(List<Message> messages) {
+        this.sentMessages.clear();
         this.sentMessages.addAll(messages);
     }
 
     public void addAllReceivedMessage(List<Message> messages) {
+        this.receivedMessages.clear();
         this.receivedMessages.addAll(messages);
     }
 
     public void addAllReserve(List<Reserve> reserves) {
+        this.reserves.clear();
         this.reserves.addAll(reserves);
     }
 

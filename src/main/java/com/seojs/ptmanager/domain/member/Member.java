@@ -30,10 +30,12 @@ public class Member {
     }
 
     public void addAllSentMessage(List<Message> messages) {
+        this.sentMessages.clear();
         this.sentMessages.addAll(messages);
     }
 
     public void addAllReceivedMessage(List<Message> messages) {
+        this.receivedMessages.clear();
         this.receivedMessages.addAll(messages);
     }
 
@@ -42,6 +44,7 @@ public class Member {
     }
 
     public void addAllTicket(List<Ticket> tickets) {
+        this.tickets.clear();
         this.tickets.addAll(tickets);
     }
 
@@ -50,6 +53,7 @@ public class Member {
     }
 
     public void addAllReserve(List<Reserve> reserves) {
+        this.reserves.clear();
         this.reserves.addAll(reserves);
     }
 

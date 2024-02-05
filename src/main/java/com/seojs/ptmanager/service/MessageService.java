@@ -6,6 +6,8 @@ import com.seojs.ptmanager.domain.message.Message;
 import com.seojs.ptmanager.domain.message.MessageRepository;
 import com.seojs.ptmanager.domain.trainer.Trainer;
 import com.seojs.ptmanager.domain.trainer.TrainerRepository;
+import com.seojs.ptmanager.exception.MemberNotFoundEx;
+import com.seojs.ptmanager.exception.TrainerNotFoundEx;
 import com.seojs.ptmanager.web.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,8 @@ public class MessageService {
     @Transactional
     public Long save(MessageDto messageDto) {
         if (messageDto.getSendMemberId() != null) {
-            Member sendMember = memberRepository.findById(messageDto.getSendMemberId()).orElseThrow();
-            Trainer receiveTrainer = trainerRepository.findById(messageDto.getReceiveTrainerId()).orElseThrow();
+            Member sendMember = memberRepository.findById(messageDto.getSendMemberId()).orElseThrow(() -> new MemberNotFoundEx("멤버가 없습니다. id = " + messageDto.getSendMemberId()));
+            Trainer receiveTrainer = trainerRepository.findById(messageDto.getReceiveTrainerId()).orElseThrow(() -> new TrainerNotFoundEx("트레이너가 없습니다. Id = " + messageDto.getReceiveTrainerId()));
 
             Message message = new Message(messageDto.getContent(), sendMember, receiveTrainer);
 
@@ -34,8 +36,8 @@ public class MessageService {
             return messageRepository.save(message);
 
         } else if (messageDto.getSendTrainerId() != null) {
-            Trainer sendTrainer = trainerRepository.findById(messageDto.getSendTrainerId()).orElseThrow();
-            Member receiveMember = memberRepository.findById(messageDto.getReceiveMemberId()).orElseThrow();
+            Trainer sendTrainer = trainerRepository.findById(messageDto.getSendTrainerId()).orElseThrow(() -> new TrainerNotFoundEx("트레이너가 없습니다. id = " + messageDto.getSendTrainerId()));
+            Member receiveMember = memberRepository.findById(messageDto.getReceiveMemberId()).orElseThrow(() -> new MemberNotFoundEx("멤버가 없습니다. id = " + messageDto.getReceiveMemberId()));
 
             Message message = new Message(messageDto.getContent(), sendTrainer, receiveMember);
 

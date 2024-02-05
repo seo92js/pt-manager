@@ -40,8 +40,9 @@ class AdminServiceTest {
         Long savedId2 = adminService.save(adminDto2);
         Long savedId3 = adminService.save(adminDto3);
 
+        //미리 1개 넣어놔서 4개
         List<AdminResponseDto> all = adminService.findAll(null);
-        assertThat(all.size()).isEqualTo(3);
+        assertThat(all.size()).isEqualTo(4);
 
         List<AdminResponseDto> find1 = adminService.findAll("성");
         Assertions.assertThat(find1.size()).isEqualTo(2);
