@@ -3,6 +3,7 @@ package com.seojs.ptmanager.web.dto;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 public class TrainerTimeUpdateDto {
@@ -10,7 +11,7 @@ public class TrainerTimeUpdateDto {
     private LocalTime endTime;
 
     public TrainerTimeUpdateDto(LocalTime startTime, LocalTime endTime) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = startTime.truncatedTo(ChronoUnit.MINUTES);
+        this.endTime = endTime.truncatedTo(ChronoUnit.MINUTES);
     }
 }

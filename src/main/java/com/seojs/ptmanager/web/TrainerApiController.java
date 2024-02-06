@@ -5,6 +5,7 @@ import com.seojs.ptmanager.web.dto.TrainerDto;
 import com.seojs.ptmanager.web.dto.TrainerResponseDto;
 import com.seojs.ptmanager.web.dto.TrainerTimeUpdateDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class TrainerApiController {
     private final TrainerService trainerService;
 
     @PostMapping("/api/v1/trainer")
-    public Long save(@RequestBody TrainerDto trainerDto) {
+    public Long save(@Validated @RequestBody TrainerDto trainerDto) {
         return trainerService.save(trainerDto);
     }
 

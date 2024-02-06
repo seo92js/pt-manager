@@ -1,4 +1,4 @@
-package com.seojs.ptmanager.interceptor;
+package com.seojs.ptmanager.web.interceptor;
 
 import com.seojs.ptmanager.domain.message.Message;
 import org.apache.ibatis.executor.Executor;

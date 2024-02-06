@@ -1,6 +1,7 @@
 package com.seojs.ptmanager.service;
 
 import com.seojs.ptmanager.exception.MemberDuplicateEx;
+import com.seojs.ptmanager.exception.MemberNotFoundEx;
 import com.seojs.ptmanager.web.dto.MemberDto;
 import com.seojs.ptmanager.web.dto.MemberResponseDto;
 import com.seojs.ptmanager.web.dto.MessageDto;
@@ -63,6 +64,12 @@ class MemberServiceTest {
 
         List<MemberResponseDto> find3 = memberService.findAll("윤종신");
         assertThat(find3.size()).isEqualTo(1);
+    }
+
+    @Test
+    void MemberNotFoundEx_테스트() {
+        assertThatThrownBy(() -> memberService.findById(1L))
+                .isInstanceOf(MemberNotFoundEx.class);
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.seojs.ptmanager.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seojs.ptmanager.domain.member.MemberRepository;
 import com.seojs.ptmanager.service.TicketService;
 import com.seojs.ptmanager.service.TrainerService;
 import com.seojs.ptmanager.web.dto.MemberDto;
@@ -31,6 +32,9 @@ class MemberApiControllerTest {
     MockMvc mvc;
 
     @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     @Autowired
@@ -43,7 +47,7 @@ class MemberApiControllerTest {
     Long ticketId;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         TrainerDto trainerDto = new TrainerDto("id", "name", "password");
         trainerId = trainerService.save(trainerDto);
 
@@ -55,7 +59,7 @@ class MemberApiControllerTest {
     void save() throws Exception {
         //회원가입
         String postUrl = "/api/v1/member";
-        MemberDto memberDto = new MemberDto("id", "name", "password");
+        MemberDto memberDto = new MemberDto("idid", "name", "password");
 
         mvc.perform(MockMvcRequestBuilders.post(postUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,14 +74,14 @@ class MemberApiControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("name")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].loginId", Matchers.is("id")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].loginId", Matchers.is("idid")));
     }
 
     @Test
     void finyById() throws Exception {
         //회원가입
         String postUrl = "/api/v1/member";
-        MemberDto memberDto = new MemberDto("id", "name", "password");
+        MemberDto memberDto = new MemberDto("idid", "name", "password");
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders.post(postUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +101,7 @@ class MemberApiControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.receivedMessages", Matchers.hasSize(0)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.tickets", Matchers.hasSize(0)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.reserves", Matchers.hasSize(0)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.loginId", Matchers.is("id")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.loginId", Matchers.is("idid")));
     }
 
     @Test

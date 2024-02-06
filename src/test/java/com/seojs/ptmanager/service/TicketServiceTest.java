@@ -1,6 +1,7 @@
 package com.seojs.ptmanager.service;
 
 import com.seojs.ptmanager.exception.TicketDuplicateEx;
+import com.seojs.ptmanager.exception.TicketNotFoundEx;
 import com.seojs.ptmanager.web.dto.MemberDto;
 import com.seojs.ptmanager.web.dto.MemberTicketDto;
 import com.seojs.ptmanager.web.dto.TicketDto;
@@ -62,6 +63,12 @@ class TicketServiceTest {
         List<TicketResponseDto> all = ticketService.findAll();
 
         assertThat(all.size()).isEqualTo(3);
+    }
+
+    @Test
+    void TicketNotFoundEx_테스트() {
+        assertThatThrownBy(() -> ticketService.findById(1L))
+                .isInstanceOf(TicketNotFoundEx.class);
     }
 
     @Test

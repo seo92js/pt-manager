@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +48,7 @@ class ReserveServiceTest {
         reserveService.reserve(reserveDto);
 
         MemberResponseDto member = memberService.findById(memberId);
-        assertThat(member.getReserves().get(0).getReserveTime()).isEqualTo(now);
+        assertThat(member.getReserves().get(0).getReserveTime()).isEqualTo(now.truncatedTo(ChronoUnit.MINUTES));
         assertThat(member.getTickets().get(0).getRemainNum()).isEqualTo(4);
         assertThat(member.getTickets().get(0).getStatus()).isEqualTo(true);
 

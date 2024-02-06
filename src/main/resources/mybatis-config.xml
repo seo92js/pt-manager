@@ -8,6 +8,6 @@
     </settings>
 
     <plugins>
-        <plugin interceptor="com.seojs.ptmanager.interceptor.AuditingInterceptor"/>
+        <plugin interceptor="com.seojs.ptmanager.web.interceptor.AuditingInterceptor"/>
     </plugins>
 </configuration>

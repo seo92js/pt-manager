@@ -1,6 +1,7 @@
 package com.seojs.ptmanager.service;
 
 import com.seojs.ptmanager.exception.TrainerDuplicateEx;
+import com.seojs.ptmanager.exception.TrainerNotFoundEx;
 import com.seojs.ptmanager.web.dto.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,8 +38,8 @@ class TrainerServiceTest {
 
         assertThat(trainerResponseDto.getLoginId()).isEqualTo(trainerDto.getLoginId());
         assertThat(trainerResponseDto.getName()).isEqualTo(trainerDto.getName());
-        assertThat(trainerResponseDto.getStartTime()).isEqualTo(LocalTime.of(0,0, 0));
-        assertThat(trainerResponseDto.getEndTime()).isEqualTo(LocalTime.of(23,59, 59));
+        assertThat(trainerResponseDto.getStartTime()).isEqualTo(LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES));
+        assertThat(trainerResponseDto.getEndTime()).isEqualTo(LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES));
     }
 
     @Test
@@ -64,6 +66,12 @@ class TrainerServiceTest {
     }
 
     @Test
+    void TrainerNotFoundEx_테스트() {
+        assertThatThrownBy(() -> trainerService.findById(1L))
+                .isInstanceOf(TrainerNotFoundEx.class);
+    }
+
+    @Test
     void 로그인_아이디_중복검사() {
         TrainerDto trainerDto1 = new TrainerDto("id","김구라","pw1");
 
@@ -81,9 +89,8 @@ class TrainerServiceTest {
         trainerService.save(trainerDto);
 
         TrainerResponseDto findTrainer = trainerService.findByLoginId(trainerDto.getLoginId());
-
-        assertThat(findTrainer.getStartTime()).isEqualTo(LocalTime.of(0,0,0));
-        assertThat(findTrainer.getEndTime()).isEqualTo(LocalTime.of(23,59,59));
+        assertThat(findTrainer.getStartTime()).isEqualTo(LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES));
+        assertThat(findTrainer.getEndTime()).isEqualTo(LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES));
 
         LocalTime expectedStartTime = LocalTime.of(9,0,0);
         LocalTime expectedEndTime = LocalTime.of(18,30,0);

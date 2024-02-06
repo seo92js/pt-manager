@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.temporal.ChronoUnit;
+
 @Service
 @RequiredArgsConstructor
 public class ReserveService {
@@ -34,7 +36,7 @@ public class ReserveService {
 
         ticket.use();
 
-        Reserve reserve = new Reserve(member, trainer, ticket, reserveDto.getReserveTime());
+        Reserve reserve = new Reserve(member, trainer, ticket, reserveDto.getReserveTime().truncatedTo(ChronoUnit.MINUTES));
 
         member.addReserve(reserve);
 

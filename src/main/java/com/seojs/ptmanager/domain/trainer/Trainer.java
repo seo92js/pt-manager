@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class Trainer {
         this.loginId = loginId;
         this.name = name;
         this.password = password;
-        this.startTime = LocalTime.MIN;
-        this.endTime = LocalTime.MAX;
+        this.startTime = LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES);
+        this.endTime = LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES);
     }
 }

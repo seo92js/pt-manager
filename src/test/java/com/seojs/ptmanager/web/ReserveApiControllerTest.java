@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -76,7 +77,7 @@ class ReserveApiControllerTest {
         MemberResponseDto member = memberService.findById(memberId);
 
         Assertions.assertThat(member.getReserves().size()).isEqualTo(2);
-        Assertions.assertThat(member.getReserves().get(0).getReserveTime()).isEqualTo(now);
-        Assertions.assertThat(member.getReserves().get(1).getReserveTime()).isEqualTo(now);
+        Assertions.assertThat(member.getReserves().get(0).getReserveTime()).isEqualTo(now.truncatedTo(ChronoUnit.MINUTES));
+        Assertions.assertThat(member.getReserves().get(1).getReserveTime()).isEqualTo(now.truncatedTo(ChronoUnit.MINUTES));
     }
 }

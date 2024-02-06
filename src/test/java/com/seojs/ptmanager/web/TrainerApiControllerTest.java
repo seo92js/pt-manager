@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -50,7 +51,7 @@ class TrainerApiControllerTest {
     void save() throws Exception {
         //회원가입
         String postUrl = "/api/v1/trainer";
-        TrainerDto trainerDto = new TrainerDto("id", "name", "password");
+        TrainerDto trainerDto = new TrainerDto("idid", "name", "password");
 
         mvc.perform(post(postUrl)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,14 +65,14 @@ class TrainerApiControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$[0].name", Matchers.is("name")))
-                .andExpect(jsonPath("$[0].loginId", Matchers.is("id")));
+                .andExpect(jsonPath("$[0].loginId", Matchers.is("idid")));
     }
 
     @Test
     void findById() throws Exception {
         //회원가입
         String postUrl = "/api/v1/trainer";
-        TrainerDto trainerDto = new TrainerDto("id", "name", "password");
+        TrainerDto trainerDto = new TrainerDto("idid", "name", "password");
 
         MvcResult result = mvc.perform(post(postUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -85,15 +86,15 @@ class TrainerApiControllerTest {
 
         String getUrl = "/api/v1/trainer/" + id;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String min = LocalTime.MIN.format(formatter);
-        String max = LocalTime.MAX.format(formatter);
+        String min = LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES).format(formatter);
+        String max = LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES).format(formatter);
 
         mvc.perform(get(getUrl))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", Matchers.is(id.intValue())))
                 .andExpect(jsonPath("$.name", Matchers.is("name")))
-                .andExpect(jsonPath("$.loginId", Matchers.is("id")))
+                .andExpect(jsonPath("$.loginId", Matchers.is("idid")))
                 .andExpect(jsonPath("$.startTime", Matchers.is(min)))
                 .andExpect(jsonPath("$.endTime", Matchers.is(max)))
                 .andExpect(jsonPath("$.sentMessages", Matchers.hasSize(0)))
@@ -105,7 +106,7 @@ class TrainerApiControllerTest {
     void findByLoginId() throws Exception {
         //회원가입
         String postUrl = "/api/v1/trainer";
-        String loginId = "id";
+        String loginId = "idid";
         TrainerDto trainerDto = new TrainerDto(loginId, "name", "password");
 
         mvc.perform(post(postUrl)
@@ -116,8 +117,8 @@ class TrainerApiControllerTest {
         //트레이너 조회
         String getUrl = "/api/v1/trainer/login-id/" + loginId;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String min = LocalTime.MIN.format(formatter);
-        String max = LocalTime.MAX.format(formatter);
+        String min = LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES).format(formatter);
+        String max = LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES).format(formatter);
 
         mvc.perform(get(getUrl))
                 .andExpect(status().isOk())
@@ -187,7 +188,7 @@ class TrainerApiControllerTest {
         String patchUrl = "/api/v1/trainer/" + id + "/time";
         LocalTime localTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String now = localTime.format(formatter);
+        String now = localTime.truncatedTo(ChronoUnit.MINUTES).format(formatter);
 
         TrainerTimeUpdateDto trainerTimeUpdateDto = new TrainerTimeUpdateDto(localTime, localTime);
 
