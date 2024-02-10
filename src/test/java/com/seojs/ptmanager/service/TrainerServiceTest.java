@@ -38,8 +38,8 @@ class TrainerServiceTest {
 
         assertThat(trainerResponseDto.getLoginId()).isEqualTo(trainerDto.getLoginId());
         assertThat(trainerResponseDto.getName()).isEqualTo(trainerDto.getName());
-        assertThat(trainerResponseDto.getStartTime()).isEqualTo(LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES));
-        assertThat(trainerResponseDto.getEndTime()).isEqualTo(LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES));
+        assertThat(trainerResponseDto.getStartTime()).isEqualTo(LocalTime.MIN.truncatedTo(ChronoUnit.HOURS));
+        assertThat(trainerResponseDto.getEndTime()).isEqualTo(LocalTime.MAX.truncatedTo(ChronoUnit.HOURS));
     }
 
     @Test
@@ -89,11 +89,11 @@ class TrainerServiceTest {
         trainerService.save(trainerDto);
 
         TrainerResponseDto findTrainer = trainerService.findByLoginId(trainerDto.getLoginId());
-        assertThat(findTrainer.getStartTime()).isEqualTo(LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES));
-        assertThat(findTrainer.getEndTime()).isEqualTo(LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES));
+        assertThat(findTrainer.getStartTime()).isEqualTo(LocalTime.MIN.truncatedTo(ChronoUnit.HOURS));
+        assertThat(findTrainer.getEndTime()).isEqualTo(LocalTime.MAX.truncatedTo(ChronoUnit.HOURS));
 
         LocalTime expectedStartTime = LocalTime.of(9,0,0);
-        LocalTime expectedEndTime = LocalTime.of(18,30,0);
+        LocalTime expectedEndTime = LocalTime.of(18,0,0);
 
         TrainerTimeUpdateDto trainerTimeUpdateDto = new TrainerTimeUpdateDto(expectedStartTime, expectedEndTime);
 

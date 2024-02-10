@@ -1,6 +1,7 @@
 package com.seojs.ptmanager.domain.reserve;
 
 import com.seojs.ptmanager.mapper.ReserveMapper;
+import com.seojs.ptmanager.web.dto.ReserveFindDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +21,9 @@ public class ReserveRepository {
 
     public List<Reserve> findByTrainerId(Long trainerId) {
         return reserveMapper.findByTrainerId(trainerId);
+    }
+
+    public List<Reserve> findByMemberIdAndDate(ReserveFindDto reserveFindDto) {
+        return reserveMapper.findByMemberIdAndDate(reserveFindDto);
     }
 }

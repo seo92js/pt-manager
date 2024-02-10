@@ -73,6 +73,13 @@ public class ExRestControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ReserveDuplicateEx.class)
+    public String runtime(ReserveDuplicateEx e) {
+        log.error("[exceptionHandler] ex", e);
+        return e.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String valid(MethodArgumentNotValidException e) {
 

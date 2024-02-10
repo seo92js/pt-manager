@@ -50,7 +50,7 @@ public class Trainer {
         this.loginId = loginId;
         this.name = name;
         this.password = password;
-        this.startTime = LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES);
-        this.endTime = LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES);
+        this.startTime = LocalTime.MIN.truncatedTo(ChronoUnit.HOURS);
+        this.endTime = LocalTime.MAX.truncatedTo(ChronoUnit.HOURS);
     }
 }

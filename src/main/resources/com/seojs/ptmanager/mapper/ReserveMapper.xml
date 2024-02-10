@@ -32,4 +32,10 @@
         from reserve
         where trainer_id = #{trainerId}
     </select>
+
+    <select id="findByMemberIdAndDate" resultMap="ReserveResultMap">
+        select *
+        from reserve
+        where member_id = #{id} and reserve_time like concat('%', #{localDate} ,'%')
+    </select>
 </mapper>

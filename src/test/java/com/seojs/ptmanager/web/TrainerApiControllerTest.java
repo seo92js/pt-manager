@@ -86,8 +86,8 @@ class TrainerApiControllerTest {
 
         String getUrl = "/api/v1/trainer/" + id;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String min = LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES).format(formatter);
-        String max = LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES).format(formatter);
+        String min = LocalTime.MIN.truncatedTo(ChronoUnit.HOURS).format(formatter);
+        String max = LocalTime.MAX.truncatedTo(ChronoUnit.HOURS).format(formatter);
 
         mvc.perform(get(getUrl))
                 .andExpect(status().isOk())
@@ -117,8 +117,8 @@ class TrainerApiControllerTest {
         //트레이너 조회
         String getUrl = "/api/v1/trainer/login-id/" + loginId;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String min = LocalTime.MIN.truncatedTo(ChronoUnit.MINUTES).format(formatter);
-        String max = LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES).format(formatter);
+        String min = LocalTime.MIN.truncatedTo(ChronoUnit.HOURS).format(formatter);
+        String max = LocalTime.MAX.truncatedTo(ChronoUnit.HOURS).format(formatter);
 
         mvc.perform(get(getUrl))
                 .andExpect(status().isOk())
@@ -188,7 +188,7 @@ class TrainerApiControllerTest {
         String patchUrl = "/api/v1/trainer/" + id + "/time";
         LocalTime localTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String now = localTime.truncatedTo(ChronoUnit.MINUTES).format(formatter);
+        String now = localTime.truncatedTo(ChronoUnit.HOURS).format(formatter);
 
         TrainerTimeUpdateDto trainerTimeUpdateDto = new TrainerTimeUpdateDto(localTime, localTime);
 

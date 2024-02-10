@@ -5,7 +5,6 @@ import lombok.Getter;
 @Getter
 public class MessageDto {
     private String content;
-
     private Long sendMemberId;
     private Long receiveTrainerId;
     private Long sendTrainerId;

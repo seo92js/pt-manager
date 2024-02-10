@@ -11,7 +11,7 @@ public class TrainerTimeUpdateDto {
     private LocalTime endTime;
 
     public TrainerTimeUpdateDto(LocalTime startTime, LocalTime endTime) {
-        this.startTime = startTime.truncatedTo(ChronoUnit.MINUTES);
-        this.endTime = endTime.truncatedTo(ChronoUnit.MINUTES);
+        this.startTime = startTime.truncatedTo(ChronoUnit.HOURS);
+        this.endTime = endTime.truncatedTo(ChronoUnit.HOURS);
     }
 }

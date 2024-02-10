@@ -25,4 +25,18 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         return true;
     }
+
+    //추후 권한 설정을 위해
+    private boolean isMember() {
+        return false;
+    }
+
+    private boolean isTrainer() {
+        return false;
+    }
+
+    private boolean isAdmin() {
+        return false;
+    }
 }
+
