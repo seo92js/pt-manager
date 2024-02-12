@@ -97,8 +97,8 @@ class ReserveServiceTest {
         ReserveDto reserveDto2 = new ReserveDto(memberId, trainerId, ticketId, localDateTime2);
         reserveService.reserve(reserveDto2);
 
-        ReserveFindDto reserveFindDto = new ReserveFindDto(memberId, LocalDate.of(24, 1, 5));
-        List<Reserve> findReserve = reserveService.findByMemberIdAndDate(reserveFindDto);
+        ReserveDateFindDto reserveDateFindDto = new ReserveDateFindDto(memberId, LocalDate.of(24, 1, 5));
+        List<Reserve> findReserve = reserveService.findByMemberIdAndDate(reserveDateFindDto);
 
         assertThat(findReserve.size()).isEqualTo(2);
     }

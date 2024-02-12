@@ -125,12 +125,12 @@ class ReserveApiControllerTest {
                 .andExpect(status().isOk());
 
         //조회
-        ReserveFindDto reserveFindDto = new ReserveFindDto(memberId, LocalDate.of(24, 1, 5));
+        ReserveDateFindDto reserveDateFindDto = new ReserveDateFindDto(memberId, LocalDate.of(24, 1, 5));
 
         String getUrl = "/api/v1/reserve/member";
         mvc.perform(get(getUrl)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(reserveFindDto)))
+                .content(objectMapper.writeValueAsString(reserveDateFindDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(2)));
     }

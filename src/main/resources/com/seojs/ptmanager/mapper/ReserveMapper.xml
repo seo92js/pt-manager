@@ -38,4 +38,10 @@
         from reserve
         where member_id = #{id} and reserve_time like concat('%', #{localDate} ,'%')
     </select>
+
+    <select id="findByMemberIdAndDateTime" resultMap="ReserveResultMap">
+        select *
+        from reserve
+        where member_id = #{id} and reserve_time like concat('%', #{localDateTime}, '%')
+    </select>
 </mapper>

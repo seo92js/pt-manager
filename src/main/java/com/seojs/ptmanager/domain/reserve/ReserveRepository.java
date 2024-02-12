@@ -1,11 +1,13 @@
 package com.seojs.ptmanager.domain.reserve;
 
 import com.seojs.ptmanager.mapper.ReserveMapper;
-import com.seojs.ptmanager.web.dto.ReserveFindDto;
+import com.seojs.ptmanager.web.dto.ReserveDateFindDto;
+import com.seojs.ptmanager.web.dto.ReserveDateTimeFindDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,7 +25,11 @@ public class ReserveRepository {
         return reserveMapper.findByTrainerId(trainerId);
     }
 
-    public List<Reserve> findByMemberIdAndDate(ReserveFindDto reserveFindDto) {
-        return reserveMapper.findByMemberIdAndDate(reserveFindDto);
+    public List<Reserve> findByMemberIdAndDate(ReserveDateFindDto reserveDateFindDto) {
+        return reserveMapper.findByMemberIdAndDate(reserveDateFindDto);
+    }
+
+    public Optional<Reserve> findByMemberIdAndDateTime(ReserveDateTimeFindDto reserveDateTimeFindDto) {
+        return reserveMapper.findByMemberIdAndDateTime(reserveDateTimeFindDto);
     }
 }
