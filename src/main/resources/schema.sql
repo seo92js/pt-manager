@@ -59,7 +59,8 @@ create table message
     foreign key (receive_trainer_id) references trainer(id),
     foreign key (send_trainer_id) references trainer(id),
     foreign key (receive_member_id) references member(id),
-    created_date datetime
+--    created_date datetime
+    created_date timestamp
 );
 
 create table memberticket
@@ -78,7 +79,8 @@ create table reserve
     member_id bigint,
     trainer_id bigint,
     ticket_id bigint,
-    reserve_time datetime,
+--    reserve_time datetime,
+    reserve_time timestamp,
     primary key (id),
     foreign key (member_id) references member(id),
     foreign key (trainer_id) references trainer(id),

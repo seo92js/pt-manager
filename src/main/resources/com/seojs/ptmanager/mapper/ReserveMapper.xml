@@ -36,12 +36,14 @@
     <select id="findByMemberIdAndDate" resultMap="ReserveResultMap">
         select *
         from reserve
-        where member_id = #{id} and reserve_time like concat('%', #{localDate} ,'%')
+<!--        where member_id = #{id} and reserve_time like concat('%', #{localDate} ,'%')-->
+        where member_id = #{id} and date_trunc('day', reserve_time) = date_trunc('day', #{localDate})
     </select>
 
     <select id="findByMemberIdAndDateTime" resultMap="ReserveResultMap">
         select *
         from reserve
-        where member_id = #{id} and reserve_time like concat('%', #{localDateTime}, '%')
+<!--        where member_id = #{id} and reserve_time like concat('%', #{localDateTime}, '%')-->
+        where member_id = #{id} and date_trunc('hour', reserve_time) = date_trunc('hour', #{localDateTime})
     </select>
 </mapper>

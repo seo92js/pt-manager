@@ -75,16 +75,10 @@ class ReserveApiControllerTest {
                         .content(objectMapper.writeValueAsString(reserveDto)))
                 .andExpect(status().isOk());
 
-        mvc.perform(patch(patchUrl)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(reserveDto)))
-                .andExpect(status().isOk());
-
         MemberResponseDto member = memberService.findById(memberId);
 
-        Assertions.assertThat(member.getReserves().size()).isEqualTo(2);
+        Assertions.assertThat(member.getReserves().size()).isEqualTo(1);
         Assertions.assertThat(member.getReserves().get(0).getReserveTime()).isEqualTo(now.truncatedTo(ChronoUnit.HOURS));
-        Assertions.assertThat(member.getReserves().get(1).getReserveTime()).isEqualTo(now.truncatedTo(ChronoUnit.HOURS));
     }
 
     @Test
